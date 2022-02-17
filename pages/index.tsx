@@ -17,6 +17,14 @@ const Home: NextPage = () => {
           Siemano! <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
+        <ul>
+          <li>Praca domowa 1
+            <ul>
+              <li>Plik users.tsx dostał wyższy priorytet niż plik users/index.tsx</li>
+            </ul>
+          </li>
+        </ul>
+
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
