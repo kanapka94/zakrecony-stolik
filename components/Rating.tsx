@@ -1,5 +1,7 @@
 interface RatingProps {
-    rating: number;
+  rating: number;
 }
-  
-export const Rating = (props: RatingProps) => <span>{props.rating}</span>;
+
+export const Rating = (props: RatingProps) => (
+  <span className="text-orange-400">{props.rating}</span>
+);
