@@ -1,9 +1,11 @@
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { Main } from '../components/Main';
+import { Pagination } from '../components/Pagination/Pagination';
 import { ProductDetails } from '../components/Product';
 
 const DATA = {
+  id: 1,
   title: 'Tytuł produktu',
   description:
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis enim atque, quibusdam ipsa eum voluptas pariatur laudantium ut. Corporis libero laudantium vero a velit suscipit blanditiis facilis quasi consectetur eligendi.',
@@ -19,6 +21,14 @@ const Home = () => {
       <Main>
         <ProductDetails data={DATA} />
       </Main>
+      <Pagination
+        activePage={1}
+        onChange={(page) => {
+          console.log(page);
+        }}
+        pages={10}
+      />
+
       <Footer />
     </div>
   );

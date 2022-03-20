@@ -1,17 +1,33 @@
+import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { ProductDetails } from '../components/Product';
+import { Pagination } from '../components/Pagination/Pagination';
+import { ProductListItem } from '../components/Product';
 
-const getProducts = async () => {
-  const response = await fetch('https://fakestoreapi.com/products');
+const getProducts = async (page = 0) => {
+  const PRODUCTS_NUMBER = 25;
+  const offset = page * PRODUCTS_NUMBER;
+
+  const response = await fetch(
+    `https://naszsklep-api.vercel.app/api/products?take=${PRODUCTS_NUMBER}&offset=${offset}`
+  );
   const data: StoreApiResponse[] = await response.json();
 
   return data;
 };
 
-const ProductsCSRPage = () => {
-  const { isLoading, isError, data } = useQuery('products', getProducts);
+const PAGINATION_OFFSET = 1;
 
-  if (isLoading) {
+const ProductsCSRPage = () => {
+  const [page, setPage] = useState(0);
+  const { isLoading, isError, data, isFetching } = useQuery(
+    ['products', page],
+    () => getProducts(page),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  if (isLoading || isFetching) {
     return <div>Loading...</div>;
   }
 
@@ -19,24 +35,29 @@ const ProductsCSRPage = () => {
     return <div>Coś poszło nie tak</div>;
   }
 
+  const handleChange = (page: number) => {
+    setPage(page - PAGINATION_OFFSET);
+  };
+
   return (
     <div>
-      <h1>Produkty</h1>
+      <h1 className="text-teal-300 text-lg">Produkty</h1>
+      <p>Strona: {page + PAGINATION_OFFSET}</p>
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         {data.map((product) => (
           <li key={product.id} className="shadow border-0">
-            <ProductDetails
+            <ProductListItem
               data={{
+                id: product.id,
                 title: product.title,
-                description: product.description,
                 imageUrl: product.image,
                 imageAlt: product.title,
-                rating: product.rating.rate,
               }}
             />
           </li>
         ))}
       </ul>
+      <Pagination activePage={page + PAGINATION_OFFSET} onChange={handleChange} pages={10} />
     </div>
   );
 };
