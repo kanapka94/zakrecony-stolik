@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Rating } from './Rating';
 
@@ -21,7 +22,14 @@ export const ProductDetails = ({ data }: ProductProps) => {
         <a>Strona Główna</a>
       </Link>
       <div className="p-4">
-        <img src={data.imageUrl} alt={data.imageAlt} />
+        <Image
+          src={data.imageUrl}
+          alt={data.imageAlt}
+          layout="responsive"
+          width={16}
+          height={9}
+          objectFit="contain"
+        />
         <p className="font-bold mt-2 mb-2">{data.title}</p>
         <p className="text-sm">{data.description}</p>
         <Rating rating={data.rating} />
@@ -38,8 +46,16 @@ interface ProductListItemProps {
 
 export const ProductListItem = ({ data }: ProductListItemProps) => {
   return (
-    <div className="p-4">
-      <img src={data.imageUrl} alt={data.imageAlt} />
+    <div className="bg-white p-4">
+      <Image
+        src={data.imageUrl}
+        alt={data.imageAlt}
+        layout="responsive"
+        width={16}
+        height={9}
+        objectFit="contain"
+        quality={20}
+      />
       <Link href={`/products/details/${data.id}`}>
         <a>
           <p className="font-bold text-xl mt-2 mb-2">{data.title}</p>
