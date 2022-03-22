@@ -17,7 +17,7 @@ interface ProductProps {
 export const ProductDetails = ({ data }: ProductProps) => {
   return (
     <div>
-      <Link href="/products">
+      <Link href="/">
         <a>Strona Główna</a>
       </Link>
       <div className="p-4">
@@ -40,8 +40,8 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
   return (
     <div className="p-4">
       <img src={data.imageUrl} alt={data.imageAlt} />
-      <Link href={`/products/${data.id}`}>
-        <a href="">
+      <Link href={`/products/details/${data.id}`}>
+        <a>
           <p className="font-bold text-xl mt-2 mb-2">{data.title}</p>
         </a>
       </Link>

@@ -1,7 +1,7 @@
 import { GetStaticPathsResult, GetStaticPropsContext, InferGetStaticPropsType } from 'next';
-import { ProductDetails } from '../../components/Product';
+import { ProductDetails } from '../../../components/Product';
 
-const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductDetailsIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (!product) {
     return <div>Ups.. Coś poszło nie tak</div>;
   }
@@ -51,7 +51,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
   };
 };
 
-export default ProductIdPage;
+export default ProductDetailsIdPage;
 
 interface StoreApiResponse {
   id: number;

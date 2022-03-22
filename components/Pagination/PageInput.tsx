@@ -1,8 +1,7 @@
 import { FocusEvent } from 'react';
-import { OnChangeCallback } from './Pagination';
 
 interface PageInputProps {
-  onChange: OnChangeCallback;
+  onChange: (page: number) => void;
 }
 export const PageInput = ({ onChange }: PageInputProps) => {
   const handleChange = (event: FocusEvent<HTMLInputElement>) => {

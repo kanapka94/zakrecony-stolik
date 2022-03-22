@@ -1,7 +1,6 @@
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { Main } from '../components/Main';
-import { Pagination } from '../components/Pagination/Pagination';
 import { ProductDetails } from '../components/Product';
 
 const DATA = {
@@ -21,14 +20,6 @@ const Home = () => {
       <Main>
         <ProductDetails data={DATA} />
       </Main>
-      <Pagination
-        activePage={1}
-        onChange={(page) => {
-          console.log(page);
-        }}
-        pages={10}
-      />
-
       <Footer />
     </div>
   );

@@ -1,7 +1,13 @@
 import { InferGetStaticPropsType } from 'next';
-import { ProductListItem } from '../components/Product';
+import { Pagination } from '../../components/Pagination/Pagination';
+import { ProductListItem } from '../../components/Product';
+import { getProducts } from './[pageId]';
 
-const ProductsPage = ({ products }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductsPage = ({ products, pageId }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  if (!products || !pageId) {
+    return <div>Ups... Coś poszło nie tak</div>;
+  }
+
   return (
     <div>
       <h1>Produkty</h1>
@@ -19,34 +25,21 @@ const ProductsPage = ({ products }: InferGetStaticPropsType<typeof getStaticProp
           </li>
         ))}
       </ul>
+      <Pagination activePage={+pageId} pages={10} />
     </div>
   );
 };
 
-export default ProductsPage;
-
-// kod wykonuje się w Node.js
 export const getStaticProps = async () => {
-  // nie możesz użyć window ani document!
-  const response = await fetch('https://fakestoreapi.com/products');
-  const data: StoreApiResponse[] = await response.json();
+  const DEFAULT_PAGE = 1;
+  const data = await getProducts(DEFAULT_PAGE);
 
   return {
     props: {
       products: data,
+      pageId: DEFAULT_PAGE,
     },
   };
 };
 
-interface StoreApiResponse {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
+export default ProductsPage;
