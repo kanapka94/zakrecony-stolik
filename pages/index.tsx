@@ -1,6 +1,3 @@
-import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
-import { Main } from '../components/Main';
 import { ProductDetails } from '../components/Product';
 
 const DATA = {
@@ -11,18 +8,11 @@ const DATA = {
   imageUrl: 'https://picsum.photos/536/354',
   imageAlt: 'Losowy obrazek',
   rating: 4.5,
+  longDescription: 'asd',
 };
 
 const Home = () => {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <Main>
-        <ProductDetails data={DATA} />
-      </Main>
-      <Footer />
-    </div>
-  );
+  return <ProductDetails data={DATA} />;
 };
 
 export default Home;

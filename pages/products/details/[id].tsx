@@ -1,4 +1,5 @@
 import { GetStaticPathsResult, GetStaticPropsContext, InferGetStaticPropsType } from 'next';
+import { NextSeo } from 'next-seo';
 import { ProductDetails } from '../../../components/Product';
 
 const ProductDetailsIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -8,6 +9,25 @@ const ProductDetailsIdPage = ({ product }: InferGetStaticPropsType<typeof getSta
 
   return (
     <div>
+      <NextSeo
+        title={product.title}
+        description={product.description}
+        canonical={`https://naszsklep.vercel.app/products/${product.id}`}
+        openGraph={{
+          type: 'website',
+          url: `https://naszsklep.vercel.app/products/${product.id}`,
+          title: product.title,
+          description: product.description,
+          images: [
+            {
+              url: product.image,
+              width: 800,
+              height: 600,
+              alt: product.title,
+            },
+          ],
+        }}
+      />
       <ProductDetails
         data={{
           id: product.id,
@@ -16,6 +36,7 @@ const ProductDetailsIdPage = ({ product }: InferGetStaticPropsType<typeof getSta
           imageUrl: product.image,
           imageAlt: product.title,
           rating: product.rating.rate,
+          longDescription: product.longDescription,
         }}
       />
     </div>
@@ -24,7 +45,7 @@ const ProductDetailsIdPage = ({ product }: InferGetStaticPropsType<typeof getSta
 
 // definiujemy zakres ścieżek dla Next'a. W przeciwnym przypadku skąd Next ma wiedzieć ile wygenerować ścieżek ?
 export const getStaticPaths = async (): Promise<GetStaticPathsResult> => {
-  const response = await fetch('https://fakestoreapi.com/products');
+  const response = await fetch('https://naszsklep-api.vercel.app/api/products');
   const data: StoreApiResponse[] = await response.json();
 
   return {
@@ -41,7 +62,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
     };
   }
 
-  const response = await fetch(`https://fakestoreapi.com/products/${params.id}`);
+  const response = await fetch(`https://naszsklep-api.vercel.app/api/products/${params.id}`);
   const data: StoreApiResponse | null = await response.json();
 
   return {
@@ -58,6 +79,7 @@ interface StoreApiResponse {
   title: string;
   price: number;
   description: string;
+  longDescription: string;
   category: string;
   image: string;
   rating: {
