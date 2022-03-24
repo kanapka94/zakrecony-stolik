@@ -1,4 +1,5 @@
 import { GetStaticPathsResult, GetStaticPropsContext, InferGetStaticPropsType } from 'next';
+import { serialize } from 'next-mdx-remote/serialize';
 import { NextSeo } from 'next-seo';
 import { ProductDetails } from '../../../components/Product';
 
@@ -65,9 +66,21 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
   const response = await fetch(`https://naszsklep-api.vercel.app/api/products/${params.id}`);
   const data: StoreApiResponse | null = await response.json();
 
+  if (!data) {
+    return {
+      props: {},
+      notFound: true,
+    };
+  }
+
+  const compiledMarkdown = await serialize(data.longDescription);
+
   return {
     props: {
-      product: data,
+      product: {
+        ...data,
+        longDescription: compiledMarkdown,
+      },
     },
   };
 };
