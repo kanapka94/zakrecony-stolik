@@ -4,17 +4,20 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Layout } from '../components/Layout';
 import { DefaultSeo } from 'next-seo';
 import SEO from '../next-seo.config';
+import { CartProvider } from '../components/Cart/CartContext';
 
 const client = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <DefaultSeo {...SEO} />
-      <QueryClientProvider client={client}>
-        <Component {...pageProps} />
-      </QueryClientProvider>
-    </Layout>
+    <CartProvider>
+      <Layout>
+        <DefaultSeo {...SEO} />
+        <QueryClientProvider client={client}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
+      </Layout>
+    </CartProvider>
   );
 }
 
