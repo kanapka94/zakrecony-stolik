@@ -3,7 +3,7 @@ import { CartBar } from './Cart/CartBar';
 
 export const Header = () => {
   return (
-    <header className="max-w-7xl px-4 mx-auto w-full flex bg-gray-300 items-center justify-between">
+    <header className="max-w-7xl py-4 px-6  mx-auto w-full flex items-center justify-between border-b-2">
       <nav className="py-2">
         <Link href="/">
           <a className="mx-2">🏠</a>

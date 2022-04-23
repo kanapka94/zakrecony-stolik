@@ -5,19 +5,23 @@ import { Layout } from '../components/Layout';
 import { DefaultSeo } from 'next-seo';
 import SEO from '../next-seo.config';
 import { CartProvider } from '../components/Cart/CartContext';
+import { ApolloProvider } from '@apollo/client';
+import { apolloClient } from '../graphql/apolloClient';
 
 const client = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <CartProvider>
-      <Layout>
-        <DefaultSeo {...SEO} />
-        <QueryClientProvider client={client}>
-          <Component {...pageProps} />
-        </QueryClientProvider>
-      </Layout>
-    </CartProvider>
+    <ApolloProvider client={apolloClient}>
+      <CartProvider>
+        <Layout>
+          <DefaultSeo {...SEO} />
+          <QueryClientProvider client={client}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
+        </Layout>
+      </CartProvider>
+    </ApolloProvider>
   );
 }
 
