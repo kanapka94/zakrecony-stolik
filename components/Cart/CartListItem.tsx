@@ -2,7 +2,7 @@ import { CartItem } from './CartContext';
 
 interface CartListItemProps {
   item: CartItem;
-  onRemove: (item: number) => void;
+  onRemove: (item: string) => void;
 }
 
 export const CartListItem = ({ item, onRemove }: CartListItemProps) => (
