@@ -21,7 +21,7 @@ export const PageInput = ({ onChange }: PageInputProps) => {
         type="tel"
         pattern="[0-9]"
         onBlur={handleChange}
-        className="border-b-2 border-dotted border-gray-300 py-2 rounded w-[50px] bg-gray-200 h-[36px] text-center"
+        className="border-0 outline-none border-b-2 border-dotted border-gray-300 py-2 rounded w-[50px] h-[36px] text-center bg-transparent"
       />
     </li>
   );

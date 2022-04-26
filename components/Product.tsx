@@ -6,7 +6,7 @@ import { Markdown } from './Markdown';
 import { useCart } from './Cart/CartContext';
 
 interface ProductDetails {
-  id: number;
+  id: string;
   title: string;
   description: string;
   longDescription: MarkdownResult;
@@ -51,17 +51,17 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
 
   return (
     <div className="bg-white p-4">
-      <Image
-        src={data.imageUrl}
-        alt={data.imageAlt}
-        layout="responsive"
-        width={16}
-        height={9}
-        objectFit="contain"
-        quality={40}
-      />
       <Link href={`/products/details/${data.id}`}>
         <a>
+          <Image
+            src={data.imageUrl}
+            alt={data.imageAlt}
+            layout="responsive"
+            width={16}
+            height={9}
+            objectFit="contain"
+            quality={40}
+          />
           <p className="font-bold text-xl mt-2 mb-2">{data.title}</p>
         </a>
       </Link>
@@ -74,7 +74,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
             count: 1,
           })
         }
-        className="mt-4 ml-auto flex hover:text-orange-600"
+        className="mt-4 ml-auto flex hover:text-emerald-400 focus:text-emerald-400 transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

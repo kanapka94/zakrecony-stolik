@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { getItemsFromLocalStorage, setCartItemsInLocalStorage } from './cartStorage';
 
 export interface CartItem {
-  id: number;
+  id: string;
   price: number;
   title: string;
   count: number;

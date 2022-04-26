@@ -1,15 +1,14 @@
-import { useRouter } from 'next/router';
 import { getButtons } from './getButtons';
 import { PageInput } from './PageInput';
 
 interface PaginationProps {
   pages: number;
   activePage: number;
+  onChange: (pageId: number) => void;
 }
 
 export const Pagination = (props: PaginationProps) => {
-  const { pages, activePage } = props;
-  const router = useRouter();
+  const { pages, activePage, onChange } = props;
 
   const firstGroupNumber = pages > 7 ? 3 : pages;
   const firstGroup = getButtons(firstGroupNumber, activePage);
@@ -20,15 +19,11 @@ export const Pagination = (props: PaginationProps) => {
     secondGroup = getButtons(3, activePage, pages - 2);
   }
 
-  const handleChange = (page: number) => {
-    router.push(`/products/${page}`);
-  };
-
   return (
     <nav className="flex justify-center p-4">
       <ul className="flex justify-center items-center">
         {firstGroup}
-        {pages > 7 && <PageInput onChange={handleChange} />}
+        {pages > 7 && <PageInput onChange={onChange} />}
         {secondGroup}
       </ul>
     </nav>

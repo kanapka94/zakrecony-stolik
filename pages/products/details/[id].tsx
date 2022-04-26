@@ -2,6 +2,14 @@ import { GetStaticPathsResult, GetStaticPropsContext, InferGetStaticPropsType } 
 import { serialize } from 'next-mdx-remote/serialize';
 import { NextSeo } from 'next-seo';
 import { ProductDetails } from '../../../components/Product';
+import {
+  GetProductDetailsBySlugDocument,
+  GetProductDetailsBySlugQuery,
+  GetProductDetailsBySlugQueryVariables,
+  GetProductsSlugsDocument,
+  GetProductsSlugsQuery,
+} from '../../../generated/graphql';
+import { apolloClient } from '../../../graphql/apolloClient';
 
 const ProductDetailsIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (!product) {
@@ -11,32 +19,30 @@ const ProductDetailsIdPage = ({ product }: InferGetStaticPropsType<typeof getSta
   return (
     <div>
       <NextSeo
-        title={product.title}
+        title={product.name}
         description={product.description}
-        canonical={`https://naszsklep.vercel.app/products/${product.id}`}
         openGraph={{
           type: 'website',
-          url: `https://naszsklep.vercel.app/products/${product.id}`,
-          title: product.title,
+          title: product.name,
           description: product.description,
           images: [
             {
-              url: product.image,
+              url: product.images[0].url,
               width: 800,
               height: 600,
-              alt: product.title,
+              alt: product.name,
             },
           ],
         }}
       />
       <ProductDetails
         data={{
-          id: product.id,
-          title: product.title,
+          id: product.slug,
+          title: product.name,
           description: product.description,
-          imageUrl: product.image,
-          imageAlt: product.title,
-          rating: product.rating.rate,
+          imageUrl: product.images[0].url,
+          imageAlt: product.name,
+          rating: 5,
           longDescription: product.longDescription,
         }}
       />
@@ -46,11 +52,12 @@ const ProductDetailsIdPage = ({ product }: InferGetStaticPropsType<typeof getSta
 
 // definiujemy zakres ścieżek dla Next'a. W przeciwnym przypadku skąd Next ma wiedzieć ile wygenerować ścieżek ?
 export const getStaticPaths = async (): Promise<GetStaticPathsResult> => {
-  const response = await fetch('https://naszsklep-api.vercel.app/api/products');
-  const data: StoreApiResponse[] = await response.json();
+  const { data } = await apolloClient.query<GetProductsSlugsQuery>({
+    query: GetProductsSlugsDocument,
+  });
 
   return {
-    paths: data.map((product) => ({ params: { id: product.id.toString() } })),
+    paths: data.products.map((product) => ({ params: { id: product.slug.toString() } })),
     fallback: false,
   };
 };
@@ -63,22 +70,29 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
     };
   }
 
-  const response = await fetch(`https://naszsklep-api.vercel.app/api/products/${params.id}`);
-  const data: StoreApiResponse | null = await response.json();
+  const { data } = await apolloClient.query<
+    GetProductDetailsBySlugQuery,
+    GetProductDetailsBySlugQueryVariables
+  >({
+    variables: {
+      slug: params.id,
+    },
+    query: GetProductDetailsBySlugDocument,
+  });
 
-  if (!data) {
+  if (!data || !data.product) {
     return {
       props: {},
       notFound: true,
     };
   }
 
-  const compiledMarkdown = await serialize(data.longDescription);
+  const compiledMarkdown = await serialize(data.product.description);
 
   return {
     props: {
       product: {
-        ...data,
+        ...data.product,
         longDescription: compiledMarkdown,
       },
     },
@@ -86,17 +100,3 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
 };
 
 export default ProductDetailsIdPage;
-
-interface StoreApiResponse {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  longDescription: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
